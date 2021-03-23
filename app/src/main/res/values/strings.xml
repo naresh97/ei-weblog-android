@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">EI Weblog</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_lehre">Lehre</string>
+    <string name="tab_pruefungen">Prüfungen</string>
+    <string name="tab_sonstiges">Sonstiges</string>
+    <string name="hsd_symbol">HSD</string>
+</resources>
