@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name">EI Weblog</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
     <string name="tab_lehre">Lehre</string>
     <string name="tab_pruefungen">Prüfungen</string>
     <string name="tab_sonstiges">Sonstiges</string>
     <string name="hsd_symbol">HSD</string>
+    <string name="weblog_xml_url"><![CDATA[
+        https://ei.hs-duesseldorf.de/weblog/_vti_bin/owssvr.dll?Cmd=Display&List=%7B169417ED-6982-4CDA-9CAC-F63FCB1757EF%7D&XMLDATA=TRUE&RowLimit=0&Queue=*
+    ]]></string>
+    <string name="notifications">Benachrichtigungen</string>
+    <string name="about">Information</string>
 </resources>
