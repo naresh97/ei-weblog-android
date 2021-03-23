@@ -1,2 +1,11 @@
 # HSD EI Weblog Android
 This app is designed to load and display the information from the HSD EI Weblog on Android and also deliver push notifications on new updates to the Weblog.
+
+## Retrieving the weblog contents
+The weblog is in essence a Microsoft Sharepoint page and therefore accessible by the [Sharepoint URL protocol](https://docs.microsoft.com/en-us/previous-versions/office/developer/sharepoint-2010/ms478653(v=office.14)).
+
+## External resources
+The fonts HSDSans-Regular and HSDSans-Elektro are used an included in this project.
+
+## License
+This project is licensed under the terms of the GPLv3 license. 
