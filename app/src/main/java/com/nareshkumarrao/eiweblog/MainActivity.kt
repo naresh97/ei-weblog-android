@@ -1,17 +1,23 @@
 package com.nareshkumarrao.eiweblog
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
-import com.android.volley.VolleyLog
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import com.google.android.material.tabs.TabLayout
-import com.nareshkumarrao.eiweblog.ui.main.Article
 import com.nareshkumarrao.eiweblog.ui.main.SectionsPagerAdapter
-import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity() {
@@ -26,50 +32,32 @@ class MainActivity : AppCompatActivity() {
         val tabs: TabLayout = findViewById(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
 
-        val myToolbar = findViewById<View>(R.id.toolbar) as Toolbar
+        val myToolbar = findViewById<View>(R.id.about_toolbar) as Toolbar
         setSupportActionBar(myToolbar)
 
-        VolleyLog.DEBUG = true
+        Utilities.createNotificationChannel(this)
 
-        /*val queue = Volley.newRequestQueue(this)
-        val url = "https://www.reddit.com"
-        val stringRequest = StringRequest(
-            Request.Method.GET, url,
-            { response ->
-                Log.d("XMLLIST", "got response!")
-                Log.d("XMLLIST", "$response")
-            },
-            { error -> Log.e("XMLLIST", error.toString()) })
-        stringRequest.retryPolicy = DefaultRetryPolicy(
-            DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2,
-            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-        )
-        queue.add(stringRequest)*/
+        val uploadWorkRequest: WorkRequest =
+            PeriodicWorkRequestBuilder<UpdateWorker>(1, TimeUnit.HOURS)
+                .build()
+        WorkManager.getInstance(this).enqueue(uploadWorkRequest)
 
-        val thread = Thread {
-            try {
-                Log.d("XMLLIST", "Starting network request thread.")
-                val client = OkHttpClient()
-                val request = okhttp3.Request.Builder().url("https://google.com/").build()
-                val response = client.newCall(request).execute()
-                Log.d("XMLLIST", response.toString())
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
 
-        thread.start()
 
-    }
-
-    fun logArticles(articles: List<Article>){
-        Log.i("XMLLIST", articles.toString())
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        //Utilities.weblogXML(baseContext, ::logArticles)
         menuInflater.inflate(R.menu.toolbar_menu, menu);
         return true;
+    }
+
+    fun showNotificationSettings(item: MenuItem){
+        val intent = Intent(this, NotificationSettingsActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun showAbout(item: MenuItem){
+        val intent = Intent(this, AboutActivity::class.java)
+        startActivity(intent)
     }
 }

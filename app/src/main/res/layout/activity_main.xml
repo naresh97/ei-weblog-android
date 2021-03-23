@@ -14,7 +14,7 @@
         android:theme="@style/Theme.EIWeblog.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/about_toolbar"
             app:contentInsetStart="0px"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

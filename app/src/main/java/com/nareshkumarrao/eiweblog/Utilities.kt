@@ -1,35 +1,74 @@
 package com.nareshkumarrao.eiweblog
 
-import android.content.ContentValues
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Intent
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import android.util.Xml
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.text.HtmlCompat
 import com.android.volley.Request
-import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.nareshkumarrao.eiweblog.ui.main.Article
 import org.xmlpull.v1.XmlPullParser
 import java.io.StringReader
 
+
 internal object Utilities {
-    fun weblogXML(context: Context, function: (d: List<Article>) -> Unit) {
+
+    fun weblogList(context: Context?, function: (d: List<Article>) -> Unit){
+        val sharedPref = context?.getSharedPreferences(context?.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        val weblogResponse = sharedPref?.getString( context?.getString(R.string.weblog_response_key), null)
+        if (weblogResponse == null){
+            fetchWeblogXML(context, function)
+            return
+        }
+
+        val parser: XmlPullParser = Xml.newPullParser()
+        parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
+        parser.setInput(  StringReader(weblogResponse) )
+        parser.nextTag()
+        function(parseXML(parser))
+    }
+
+    fun fetchWeblogXML(context: Context?, function: (d: List<Article>) -> Unit) {
 
         val queue = Volley.newRequestQueue(context)
 
-        val url = "https://www.google.com"
+        val url = context?.getString(R.string.weblog_xml_url)
 
         val stringRequest = StringRequest(Request.Method.GET, url,
                 { response ->
-                    Log.d("XMLLIST", "got response!")
-                    // Display the first 500 characters of the response string.
-                    Log.d("XMLLIST", "$response")
+                    val responseStr = String(response.toByteArray(Charsets.ISO_8859_1), Charsets.UTF_8)
+
+                    val sharedPref = context?.getSharedPreferences(context?.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+                    if (sharedPref != null) {
+                        with (sharedPref.edit()) {
+                            putString(context?.getString(R.string.weblog_response_key), responseStr)
+                            apply()
+                        }
+                    }
+
+
+
+                    val parser: XmlPullParser = Xml.newPullParser()
+                    parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
+                    //Log.d("XMLLIST", responseStr )
+                    parser.setInput(  StringReader(responseStr) )
+                    parser.nextTag()
+
+                    val articles = parseXML(parser)
+                    function(articles)
+
                 },
                 { error -> Log.e("XMLLIST", error.toString()) })
 
-
         queue.add(stringRequest)
-        Log.e("XMLLIST", "Adding request to queue from: $url")
     }
 
     private fun parseXML(parser: XmlPullParser): List<Article> {
@@ -56,7 +95,7 @@ internal object Utilities {
                 continue
             }
             if (parser.name == "z:row") {
-                articles.add(parseZROW(parser))
+                parseZROW(parser)?.let { articles.add(it) }
             } else {
                 parseSkip(parser)
             }
@@ -64,16 +103,21 @@ internal object Utilities {
         return articles
     }
 
-    private fun parseZROW(parser: XmlPullParser): Article {
+    private fun parseZROW(parser: XmlPullParser): Article? {
         parser.require(XmlPullParser.START_TAG, null, "z:row")
         val title = parser.getAttributeValue(null, "ows_Title")
         val content = parser.getAttributeValue(null, "ows_Body")
         val date = parser.getAttributeValue(null, "ows_Created")
         val author = parser.getAttributeValue(null, "ows_Autor2")
+        val category = parser.getAttributeValue(null, "ows_Kategorie")
         parser.nextTag()
-        parser.require(XmlPullParser.END_TAG, null, "link")
+        parser.require(XmlPullParser.END_TAG, null, "z:row")
 
-        return Article(title, content, date, author)
+        if(title == null || content == null || date == null || author == null || category == null){
+            return null
+        }
+
+        return Article(title, content, date, author, category)
     }
 
     private fun parseSkip(parser: XmlPullParser) {
@@ -87,5 +131,50 @@ internal object Utilities {
                 XmlPullParser.START_TAG -> depth++
             }
         }
+    }
+
+    fun sendNotification(context: Context?, article: Article, id:Int) {
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+
+        var builder = NotificationCompat.Builder(context!!, context.getString(R.string.channel_id))
+            .setSmallIcon(R.drawable.ic_stat_name)
+            .setContentTitle(article.title)
+            .setStyle(NotificationCompat.BigTextStyle()
+                .bigText(HtmlCompat.fromHtml(article.content, HtmlCompat.FROM_HTML_MODE_COMPACT)))
+            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true)
+
+        with(NotificationManagerCompat.from(context)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(id, builder.build())
+        }
+
+    }
+
+    fun createNotificationChannel(context: Context?){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = context?.getString(R.string.channel_name)
+            val descriptionText = context?.getString(R.string.channel_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(context?.getString(R.string.channel_id), name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    fun getLatestRelevantArticle(articles: List<Article>): Article? {
+        val sortedArticles = articles.sortedByDescending { it.date }
+        for (article in sortedArticles){
+            if( article.category == "Lehre" || article.category == "Prüfung" || article.category == "Sonstiges"){
+                return article
+            }
+        }
+        return null
     }
 }

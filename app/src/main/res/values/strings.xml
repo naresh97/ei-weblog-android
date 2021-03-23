@@ -5,8 +5,30 @@
     <string name="tab_sonstiges">Sonstiges</string>
     <string name="hsd_symbol">HSD</string>
     <string name="weblog_xml_url"><![CDATA[
-        https://ei.hs-duesseldorf.de/weblog/_vti_bin/owssvr.dll?Cmd=Display&List=%7B169417ED-6982-4CDA-9CAC-F63FCB1757EF%7D&XMLDATA=TRUE&RowLimit=0&Queue=*
+        https://ei.hs-duesseldorf.de/weblog/_vti_bin/owssvr.dll?Cmd=Display&List=%7B169417ED-6982-4CDA-9CAC-F63FCB1757EF%7D&XMLDATA=TRUE&RowLimit=0&Query=*
     ]]></string>
     <string name="notifications">Benachrichtigungen</string>
     <string name="about">Information</string>
+    <string name="preference_file_key">com.nareshkumarrao.eiweblog.preferences</string>
+    <string name="weblog_response_key">weblog_response</string>
+    <string name="tab_veranstaltungen">Veranstaltungen</string>
+    <string name="about_text">
+        My name is Naresh and I am doing my Master\'s in Automation at the HSD.\n
+        \nI wrote this app because I was unsatisfied with the EI weblog that was always silently being
+        updated. The other option would be to develop enough self-discipline to check it regulary.
+        Yeah no thanks.\n
+        \nI put too many hours of work into this app, and if you like it and found it useful, I would really
+        appreciate it if you bought me a beer, or maybe a tasty döner.
+    </string>
+    <string name="about_title">Information</string>
+    <string name="send_beer">Send me €5 for beer on PayPal</string>
+    <string name="license_info">This project is developed open-source and is to be distributed freely
+        as contained within the terms of the GPLv3 license. More information about the license and the
+        source code of this project can be found on its GitHub repository.
+    </string>
+    <string name="channel_name">EI Weblog Notifications</string>
+    <string name="channel_description">Latest updates from the EI Weblog</string>
+    <string name="channel_id">com.nareshkumarrao.eiweblog.update</string>
+    <string name="notifications_title">Benachrichtigungen</string>
+    <string name="enable_notifications">Notify me when new updates are posted to the weblog</string>
 </resources>
