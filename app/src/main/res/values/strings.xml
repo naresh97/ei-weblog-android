@@ -29,5 +29,5 @@
     <string name="channel_id" translatable="false">com.nareshkumarrao.eiweblog.update</string>
     <string name="notifications_title">Benachrichtigung</string>
     <string name="enable_notifications">Notify me when new updates are posted to the weblog</string>
-    <string name="enable_notifications_key">com.nareshkumarrao.notifications.key</string>
+    <string name="enable_notifications_key" translatable="false">com.nareshkumarrao.notifications.key</string>
 </resources>
