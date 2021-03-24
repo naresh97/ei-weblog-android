@@ -12,7 +12,7 @@ I will not be distributing this app on the PlayStore (or on FreeDroid at this mo
 
 The latest APK can always be downloaded from GitHub under Releases.
 
-[**Download APK v0.9.2**](https://github.com/naresh97/ei-weblog-android/releases/download/v0.9.2/ei-weblog-release.apk)
+[**Download APK v0.9.3**](https://github.com/naresh97/ei-weblog-android/releases/download/v0.9.3/ei-weblog-release.apk)
 
 ## Retrieving the weblog contents
 The weblog is in essence a Microsoft Sharepoint page and therefore accessible by the [Sharepoint URL protocol](https://docs.microsoft.com/en-us/previous-versions/office/developer/sharepoint-2010/ms478653(v=office.14)).
