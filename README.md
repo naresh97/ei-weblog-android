@@ -12,6 +12,8 @@ The latest APK can always be downloaded from GitHub under Releases.
 
 [**Download APK v0.9**](https://github.com/naresh97/ei-weblog-android/releases/download/v0.9/ei-weblog-release.apk)
 
+![Screenshot of the app](images/app_screenshot.png "Screenshot of the app")
+
 ## Retrieving the weblog contents
 The weblog is in essence a Microsoft Sharepoint page and therefore accessible by the [Sharepoint URL protocol](https://docs.microsoft.com/en-us/previous-versions/office/developer/sharepoint-2010/ms478653(v=office.14)).
 
