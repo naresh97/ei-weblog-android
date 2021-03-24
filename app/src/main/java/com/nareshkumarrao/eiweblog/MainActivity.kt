@@ -1,10 +1,13 @@
 package com.nareshkumarrao.eiweblog
 
 import android.content.Intent
+import android.content.pm.PackageInfo
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
@@ -38,8 +41,46 @@ class MainActivity : AppCompatActivity() {
                 .build()
         WorkManager.getInstance(this).enqueue(uploadWorkRequest)
 
+        Utilities.fetchRepoReleaseInformation(this, ::repoReleaseCallback)
 
 
+    }
+
+    private fun repoReleaseCallback(version: String, log: String, url: String?){
+        var version = version
+        val url = url ?: getString(R.string.github_repository)
+        val log = "Changelog $version: \n\n$log"
+
+        if(version.substring(0,1) == "v"){
+            version = version.substring(1)
+        }
+
+        val pInfo: PackageInfo = packageManager.getPackageInfo(packageName, 0)
+        val pVersion = pInfo.versionName
+
+        if( version != pVersion){
+            val builder = AlertDialog.Builder(this)
+
+            builder.apply {
+                setPositiveButton(getString(R.string.download)) { _, _ ->
+                    startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(url)
+                        )
+                    )
+                }
+                setNegativeButton(getString(R.string.cancel)){ dialog, _ ->
+                    dialog.dismiss()
+                }
+            }
+            builder.setMessage(log)
+                .setTitle(getString(R.string.update_dialog))
+
+
+            builder.create().show()
+
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
