@@ -17,4 +17,7 @@
         Diese sind in der GPLv3-Lizenz dieses Projekts geregelt. Du kannst mehr über den Lizenz und auch
         die Quellecode auf dem GitHub-Repository finden.
     </string>
+    <string name="download">Herunterladen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="update_dialog">Neues App-Version verfügbar</string>
 </resources>

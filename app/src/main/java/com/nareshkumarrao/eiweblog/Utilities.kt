@@ -3,8 +3,8 @@ package com.nareshkumarrao.eiweblog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.Intent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.util.Log
 import android.util.Xml
@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.text.HtmlCompat
 import com.android.volley.Request
+import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.nareshkumarrao.eiweblog.ui.main.Article
@@ -176,5 +177,32 @@ internal object Utilities {
             }
         }
         return null
+    }
+
+    fun fetchRepoReleaseInformation(context: Context?, callback: (v: String, log:String, url:String?) -> Unit){
+        val queue = Volley.newRequestQueue(context)
+        val url = context?.getString(R.string.github_api_releases)
+        val jsonObjectRequest = JsonArrayRequest(Request.Method.GET, url, null,
+                { response ->
+                    val latestRelease = response.getJSONObject(0)
+                    val releaseVersion = latestRelease.getString("tag_name")
+                    val releaseLog = latestRelease.getString("body")
+                    val releaseAssets = latestRelease.getJSONArray("assets")
+                    var releaseAPK: String? = null
+                    for(i in 0 until releaseAssets.length()){
+                        val asset = releaseAssets.getJSONObject(0)
+                        val contentType = asset.getString("content_type")
+                        if( contentType == "application/vnd.android.package-archive" ){
+                            releaseAPK = asset.getString("browser_download_url")
+                            break
+                        }
+                    }
+                    Log.d("RESTAPI", "v: $releaseVersion, log: $releaseLog, apk: $releaseAPK")
+                    callback(releaseVersion, releaseLog, releaseAPK)
+                },
+                {  error -> Log.e("RESTAPI", error.toString())
+                }
+        )
+        queue.add(jsonObjectRequest)
     }
 }

@@ -18,4 +18,7 @@
         \nI put too many hours of work into this app, and if you like it and found it useful, I would really
         appreciate it if you bought me a beer, or maybe a tasty döner.
     </string>
+    <string name="download">Download</string>
+    <string name="cancel">Cancel</string>
+    <string name="update_dialog">New version of app available</string>
 </resources>
