@@ -11,14 +11,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.nareshkumarrao.eiweblog.R
 import com.nareshkumarrao.eiweblog.Utilities
 
-class SectionsFragment() : Fragment() {
+class SectionsFragment : Fragment() {
 
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_sections, container, false)
 
-        this.swipeRefreshLayout = rootView.findViewById<SwipeRefreshLayout>(R.id.sectionsSwipeRefresh)
+        this.swipeRefreshLayout = rootView.findViewById(R.id.sectionsSwipeRefresh)
         this.swipeRefreshLayout?.setOnRefreshListener {
             Utilities.fetchWeblogXML(this.context, ::updateView)
         }
@@ -50,7 +50,7 @@ class SectionsFragment() : Fragment() {
 
     private fun updateView(get_articles: List<Article>){
         this.swipeRefreshLayout?.isRefreshing=false
-        var articles: MutableList<Article> = mutableListOf()
+        val articles: MutableList<Article> = mutableListOf()
         val title = arguments?.getString(ARG_SECTION_NAME) ?: return
         for (article in get_articles){
             if(article.category == title){

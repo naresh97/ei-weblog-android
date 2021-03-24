@@ -22,8 +22,8 @@ import java.io.StringReader
 internal object Utilities {
 
     fun weblogList(context: Context?, function: (d: List<Article>) -> Unit){
-        val sharedPref = context?.getSharedPreferences(context?.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-        val weblogResponse = sharedPref?.getString( context?.getString(R.string.weblog_response_key), null)
+        val sharedPref = context?.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        val weblogResponse = sharedPref?.getString(context.getString(R.string.weblog_response_key), null)
         if (weblogResponse == null){
             fetchWeblogXML(context, function)
             return
@@ -46,10 +46,10 @@ internal object Utilities {
                 { response ->
                     val responseStr = String(response.toByteArray(Charsets.ISO_8859_1), Charsets.UTF_8)
 
-                    val sharedPref = context?.getSharedPreferences(context?.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+                    val sharedPref = context?.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
                     if (sharedPref != null) {
                         with (sharedPref.edit()) {
-                            putString(context?.getString(R.string.weblog_response_key), responseStr)
+                            putString(context.getString(R.string.weblog_response_key), responseStr)
                             apply()
                         }
                     }
@@ -139,7 +139,7 @@ internal object Utilities {
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
-        var builder = NotificationCompat.Builder(context!!, context.getString(R.string.channel_id))
+        val builder = NotificationCompat.Builder(context!!, context.getString(R.string.channel_id))
             .setSmallIcon(R.drawable.ic_stat_name)
             .setContentTitle(article.title)
             .setStyle(NotificationCompat.BigTextStyle()

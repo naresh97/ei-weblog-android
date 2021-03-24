@@ -12,7 +12,7 @@ class UpdateWorker(private val context: Context, workerParams: WorkerParameters)
         val sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
         val notificationsEnabled = sharedPref?.getBoolean(context.getString(R.string.enable_notifications_key), true)
         if(!notificationsEnabled!!){
-            return Result.success();
+            return Result.success()
         }
 
         Utilities.weblogList(context) { articles ->

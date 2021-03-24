@@ -1,10 +1,6 @@
 package com.nareshkumarrao.eiweblog
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -47,8 +43,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.toolbar_menu, menu);
-        return true;
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        return true
     }
 
     fun showNotificationSettings(item: MenuItem){

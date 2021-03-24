@@ -7,7 +7,6 @@
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -24,7 +23,6 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -39,7 +37,6 @@
                     android:textSize="25sp" />
 
                 <TextView
-                    android:id="@+id/hsd_symb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -50,7 +47,8 @@
                     android:text="@string/hsd_symbol"
                     android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
                     android:textColor="@color/fh_red"
-                    android:textSize="25sp" />
+                    android:textSize="25sp"
+                    tools:ignore="RelativeOverlap" />
             </RelativeLayout>
 
         </androidx.appcompat.widget.Toolbar>

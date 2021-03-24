@@ -1,7 +1,5 @@
 package com.nareshkumarrao.eiweblog.ui.main
 
-import android.os.Build
-import android.text.Html
 import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +7,6 @@ import android.widget.TextView
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.nareshkumarrao.eiweblog.R
-import org.w3c.dom.Text
 
 data class Article(val title: String, val content: String, val date: String, val author: String, val category: String)
 
@@ -30,7 +27,7 @@ class ItemArticleAdapter(private val articles: List<Article>) : RecyclerView.Ada
         fun bind(article: Article) {
             title?.text = article.title
             content?.text = HtmlCompat.fromHtml(article.content, HtmlCompat.FROM_HTML_MODE_COMPACT)
-            content?.let { Linkify.addLinks(it, Linkify.WEB_URLS) };
+            content?.let { Linkify.addLinks(it, Linkify.WEB_URLS) }
             author?.text = article.author
             date?.text = article.date
         }
@@ -38,7 +35,7 @@ class ItemArticleAdapter(private val articles: List<Article>) : RecyclerView.Ada
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemArticleAdapter.ViewHolder {
-        var inflater = LayoutInflater.from(parent.context)
+        val inflater = LayoutInflater.from(parent.context)
         return ViewHolder(inflater, parent)
     }
 

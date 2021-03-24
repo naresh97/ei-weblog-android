@@ -2,8 +2,6 @@ package com.nareshkumarrao.eiweblog
 
 import android.content.Context
 import android.os.Bundle
-import android.widget.CompoundButton
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
@@ -24,13 +22,13 @@ class NotificationSettingsActivity : AppCompatActivity() {
 
         val notificationSwitch = findViewById<SwitchCompat>(R.id.notification_switch)
         notificationSwitch.isChecked = weblogResponse!!
-        notificationSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { _, isChecked ->
-            with (sharedPref.edit()) {
+        notificationSwitch.setOnCheckedChangeListener { _, isChecked ->
+            with(sharedPref.edit()) {
                 putBoolean(getString(R.string.enable_notifications_key), isChecked)
                 apply()
             }
             //Toast.makeText(this, "Notifications are set to $isChecked", Toast.LENGTH_SHORT).show()
-        })
+        }
 
 
     }
