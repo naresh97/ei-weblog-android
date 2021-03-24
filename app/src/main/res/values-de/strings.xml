@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="about">Information</string>
+    <string name="about_title">Info</string>
+    <string name="send_beer">Shick mir €5 für ein Bier über PayPal</string>
+    <string name="notifications_title">Benachrichtigung</string>
+    <string name="enable_notifications">Benachrichtige mich über Neuerungen auf der Weblog</string>
+    <string name="about_text">
+        Ich bin Naresh und mache gerade mein Master in Automatisierungstechnik hier an der HSD.\n
+        \nIch habe diese App geschrieben, da die EI-Weblog für mich unzufriedenstellend war. Ich vergesse
+        halt immer diese Webseite zu checken, habe halt kein Disziplin dafür.\n
+        \nIch habe viele Stunden in diesem App reingesteckt, und falls du es magst, wäre es sehr lieb
+        wenn du mir ein Bierchen oder ein leckeres Döner kaufst.
+    </string>
+    <string name="license_info">
+        Dieses Projekt wurde Open-Source entwickelt, damit es kostenlos und frei verbreitet werden kann.
+        Diese sind in der GPLv3-Lizenz dieses Projekts geregelt. Du kannst mehr über den Lizenz und auch
+        die Quellecode auf dem GitHub-Repository finden.
+    </string>
+</resources>

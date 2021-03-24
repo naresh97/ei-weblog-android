@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:onClick="showNotificationSettings"
-        android:title="@string/notifications"
+        android:title="@string/notifications_title"
         app:showAsAction="never" />
     <item
         android:onClick="showAbout"

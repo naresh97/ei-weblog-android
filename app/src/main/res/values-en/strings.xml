@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="about">About</string>
+    <string name="license_info">
+        This project is developed open-source and is to be distributed freely
+        as contained within the terms of the GPLv3 license. More information about the license and the
+        source code of this project can be found on its GitHub repository.
+    </string>
+    <string name="app_name" translatable="false">"        "</string>
+    <string name="preference_file_key" translatable="false">"    "</string>
+    <string name="about_title">About</string>
+    <string name="send_beer">Send me €5 for beer on PayPal</string>
+    <string name="notifications_title">Notifications</string>
+    <string name="enable_notifications">Notify me when new updates are posted to the weblog</string>
+    <string name="about_text">
+        My name is Naresh and I am doing my Master\'s in Automation at the HSD.\n
+        \nI wrote this app because I was unsatisfied with the EI weblog that was always silently being
+        updated. The other option would be to develop enough self-discipline to check it regulary.
+        Yeah no thanks.\n
+        \nI put too many hours of work into this app, and if you like it and found it useful, I would really
+        appreciate it if you bought me a beer, or maybe a tasty döner.
+    </string>
+</resources>
