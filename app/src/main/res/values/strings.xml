@@ -24,15 +24,34 @@
         as contained within the terms of the GPLv3 license. More information about the license and the
         source code of this project can be found on its GitHub repository.
     </string>
-    <string name="channel_name" translatable="false">EI Weblog Notifications</string>
-    <string name="channel_description" translatable="false">Latest updates from the EI Weblog</string>
-    <string name="channel_id" translatable="false">com.nareshkumarrao.eiweblog.update</string>
+    <string name="weblog_notification_channel_name" translatable="false">EI Weblog Notifications</string>
+    <string name="weblog_notification_channel_description" translatable="false">Latest updates from the EI Weblog</string>
+    <string name="weblog_notification_channel_id" translatable="false">com.nareshkumarrao.eiweblog.weblogupdate</string>
     <string name="notifications_title">Benachrichtigung</string>
-    <string name="enable_notifications">Notify me when new updates are posted to the weblog</string>
-    <string name="enable_notifications_key" translatable="false">com.nareshkumarrao.notifications.key</string>
+    <string name="enable_weblog_notifications_text">Notify me when new updates are posted to the weblog</string>
+    <string name="enable_weblog_notifications_key" translatable="false">com.nareshkumarrao.weblog_notifications.key</string>
     <string name="github_repository" translatable="false">GitHub Repository</string>
     <string name="github_api_releases" translatable="false">https://api.github.com/repos/naresh97/ei-weblog-android/releases</string>
     <string name="update_dialog">New version of app available</string>
     <string name="download">Download</string>
     <string name="cancel">Cancel</string>
+    <string name="ossc_login_post" translatable="false"><![CDATA[https://ossc.hs-duesseldorf.de/qisserver/rds?state=user&type=1&category=auth.login&startpage=portal.vm&breadCrumbSource=portal]]></string>
+    <string name="ossc_select_noten" translatable="false"><![CDATA[https://ossc.hs-duesseldorf.de/qisserver/rds?state=change&type=1&moduleParameter=studyPOSMenu&nextdir=change&next=menu.vm&subdir=applications&xml=menu&purge=y&navigationPosition=functions%2CstudyPOSMenu&breadcrumb=studyPOSMenu&topitem=functions&subitem=studyPOSMenu]]></string>
+    <string name="exam_rows_key" translatable="false">exam_rows</string>
+    <string name="username_key" translatable="false">username_key</string>
+    <string name="password_key" translatable="false">password_key</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="grades_title">Notenspiegel</string>
+    <string name="versuch">Versuch:</string>
+    <string name="pruefungsdatum">Prüfungsdatum:</string>
+    <string name="login">Anmelden</string>
+    <string name="exam_results_notification">New exam results out!</string>
+    <string name="grades_notification_channel_name">Exam Results</string>
+    <string name="grades_notification_channel_description">Notification when you get a new exam result</string>
+    <string name="grades_notification_channel_id" translatable="false">com.nareshkumarrao.eiweblog.grades</string>
+    <string name="enable_grades_notifications_text">Notify me when I get new grades</string>
+    <string name="enable_grades_notifications_key" translatable="false">com.nareshkumarrao.eiweblog.grades_notifications.key</string>
+    <string name="login_dialog_title">Login to OSSC</string>
+    <string name="error">ERROR!</string>
 </resources>

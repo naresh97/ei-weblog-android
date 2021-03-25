@@ -18,16 +18,25 @@ class NotificationSettingsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         val sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-        val weblogResponse = sharedPref?.getBoolean(getString(R.string.enable_notifications_key), true)
 
-        val notificationSwitch = findViewById<SwitchCompat>(R.id.notification_switch)
-        notificationSwitch.isChecked = weblogResponse!!
-        notificationSwitch.setOnCheckedChangeListener { _, isChecked ->
+        val weblogResponse = sharedPref?.getBoolean(getString(R.string.enable_weblog_notifications_key), true)
+        val weblogNotificationSwitch = findViewById<SwitchCompat>(R.id.weblog_notification_switch)
+        weblogNotificationSwitch.isChecked = weblogResponse!!
+        weblogNotificationSwitch.setOnCheckedChangeListener { _, isChecked ->
             with(sharedPref.edit()) {
-                putBoolean(getString(R.string.enable_notifications_key), isChecked)
+                putBoolean(getString(R.string.enable_weblog_notifications_key), isChecked)
                 apply()
             }
-            //Toast.makeText(this, "Notifications are set to $isChecked", Toast.LENGTH_SHORT).show()
+        }
+
+        val gradeResponse = sharedPref.getBoolean(getString(R.string.enable_grades_notifications_key), true)
+        val gradeNotificationSwitch = findViewById<SwitchCompat>(R.id.grades_notification_switch)
+        gradeNotificationSwitch.isChecked = gradeResponse
+        gradeNotificationSwitch.setOnCheckedChangeListener { _, isChecked ->
+            with(sharedPref.edit()) {
+                putBoolean(getString(R.string.enable_grades_notifications_key), isChecked)
+                apply()
+            }
         }
 
 

@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(myToolbar)
 
         Utilities.createNotificationChannel(this)
+        HISUtility.createNotificationChannel(this)
 
         val uploadWorkRequest: WorkRequest =
             PeriodicWorkRequestBuilder<UpdateWorker>(1, TimeUnit.HOURS)
@@ -42,8 +43,6 @@ class MainActivity : AppCompatActivity() {
         WorkManager.getInstance(this).enqueue(uploadWorkRequest)
 
         Utilities.fetchRepoReleaseInformation(this, ::repoReleaseCallback)
-
-
     }
 
     private fun repoReleaseCallback(version: String, log: String, url: String?){
@@ -96,5 +95,9 @@ class MainActivity : AppCompatActivity() {
     fun showAbout(item: MenuItem){
         val intent = Intent(this, AboutActivity::class.java)
         startActivity(intent)
+    }
+
+    fun showGrades(item: MenuItem){
+        startActivity(Intent(this, GradesActivity::class.java))
     }
 }

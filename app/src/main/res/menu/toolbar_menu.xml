@@ -9,4 +9,9 @@
         android:onClick="showAbout"
         android:title="@string/about"
         app:showAsAction="never" />
+
+    <item
+        android:onClick="showGrades"
+        android:title="@string/grades_title"
+        app:showAsAction="never" />
 </menu>
