@@ -55,8 +55,6 @@ internal object Utilities {
                         }
                     }
 
-
-
                     val parser: XmlPullParser = Xml.newPullParser()
                     parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
                     //Log.d("XMLLIST", responseStr )
@@ -140,7 +138,7 @@ internal object Utilities {
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
-        val builder = NotificationCompat.Builder(context!!, context.getString(R.string.channel_id))
+        val builder = NotificationCompat.Builder(context!!, context.getString(R.string.weblog_notification_channel_id))
             .setSmallIcon(R.drawable.ic_stat_name)
             .setContentTitle(article.title)
             .setStyle(NotificationCompat.BigTextStyle()
@@ -158,10 +156,10 @@ internal object Utilities {
 
     fun createNotificationChannel(context: Context?){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = context?.getString(R.string.channel_name)
-            val descriptionText = context?.getString(R.string.channel_description)
+            val name = context?.getString(R.string.weblog_notification_channel_name)
+            val descriptionText = context?.getString(R.string.weblog_notification_channel_description)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(context?.getString(R.string.channel_id), name, importance).apply {
+            val channel = NotificationChannel(context?.getString(R.string.weblog_notification_channel_id), name, importance).apply {
                 description = descriptionText
             }
             val notificationManager: NotificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

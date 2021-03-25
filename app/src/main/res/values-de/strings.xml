@@ -4,7 +4,7 @@
     <string name="about_title">Info</string>
     <string name="send_beer">Shick mir €5 für ein Bier über PayPal</string>
     <string name="notifications_title">Benachrichtigung</string>
-    <string name="enable_notifications">Benachrichtige mich über Neuerungen auf der Weblog</string>
+    <string name="enable_weblog_notifications_text">Benachrichtige mich über Neuerungen auf der Weblog</string>
     <string name="about_text">
         Ich bin Naresh und mache gerade mein Master in Automatisierungstechnik hier an der HSD.\n
         \nIch habe diese App geschrieben, da die EI-Weblog für mich unzufriedenstellend war. Ich vergesse
@@ -20,4 +20,16 @@
     <string name="download">Herunterladen</string>
     <string name="cancel">Abbrechen</string>
     <string name="update_dialog">Neues App-Version verfügbar</string>
+    <string name="username">Benutzername</string>
+    <string name="password">Passwort</string>
+    <string name="grades_title">Notenspiegel</string>
+    <string name="versuch">Versuch:</string>
+    <string name="pruefungsdatum">Prüfungsdatum:</string>
+    <string name="login">Anmelden</string>
+    <string name="exam_results_notification">Neues Klausurergebnis!</string>
+    <string name="grades_notification_channel_name">Klausurergebnis</string>
+    <string name="grades_notification_channel_description">Benachrichtigung bei neuem Klausurergebnis</string>
+    <string name="enable_grades_notifications_text">Benachrichtige mich bei neuem Klausurergebnis</string>
+    <string name="login_dialog_title">Anmelden bei OSSC</string>
+    <string name="error">FEHLER!</string>
 </resources>

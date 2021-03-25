@@ -10,23 +10,34 @@ class UpdateWorker(private val context: Context, workerParams: WorkerParameters)
     override fun doWork(): Result {
 
         val sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-        val notificationsEnabled = sharedPref?.getBoolean(context.getString(R.string.enable_notifications_key), true)
-        if(!notificationsEnabled!!){
-            return Result.success()
+
+        val weblogNotificationsEnabled = sharedPref?.getBoolean(context.getString(R.string.enable_weblog_notifications_key), true)
+        val gradesNotificationsEnabled = sharedPref?.getBoolean(context.getString(R.string.enable_grades_notifications_key), true)
+
+        if(weblogNotificationsEnabled!!){
+            Utilities.weblogList(context) { articles ->
+                val lastArticle = Utilities.getLatestRelevantArticle(articles)!!
+                val hashString = lastArticle.title + lastArticle.content + lastArticle.date
+                val oldHash = md5(hashString)
+
+                Utilities.fetchWeblogXML(applicationContext){newArticles ->
+                    val lastNewArticle = Utilities.getLatestRelevantArticle(newArticles)!!
+                    val newHashString = lastNewArticle.title + lastNewArticle.content + lastNewArticle.date
+                    val newHash = md5(newHashString)
+
+                    if(oldHash != newHash){
+                        Utilities.sendNotification(context, lastNewArticle, newArticles.size)
+                    }
+                }
+            }
         }
 
-        Utilities.weblogList(context) { articles ->
-            val lastArticle = Utilities.getLatestRelevantArticle(articles)!!
-            val hashString = lastArticle.title + lastArticle.content + lastArticle.date
-            val oldHash = md5(hashString)
-
-            Utilities.fetchWeblogXML(applicationContext){newArticles ->
-                val lastNewArticle = Utilities.getLatestRelevantArticle(newArticles)!!
-                val newHashString = lastNewArticle.title + lastNewArticle.content + lastNewArticle.date
-                val newHash = md5(newHashString)
-
-                if(oldHash != newHash){
-                    Utilities.sendNotification(context, lastNewArticle, newArticles.size)
+        if(gradesNotificationsEnabled!!){
+            HISUtility.checkForUpdates(context) { gradeUpdates ->
+                if (gradeUpdates != null) {
+                    for (grade in gradeUpdates) {
+                        HISUtility.sendNotification(context, grade, gradeUpdates.indexOf(grade))
+                    }
                 }
             }
         }
