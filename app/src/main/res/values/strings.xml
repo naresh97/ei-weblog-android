@@ -54,4 +54,6 @@
     <string name="enable_grades_notifications_key" translatable="false">com.nareshkumarrao.eiweblog.grades_notifications.key</string>
     <string name="login_dialog_title">Login to OSSC</string>
     <string name="error">ERROR!</string>
+    <string name="ossc_timeout_message">OSSC has timed out. Try again later.</string>
+    <string name="load_weblog_error_message">Could not load new weblog data. Try again later.</string>
 </resources>

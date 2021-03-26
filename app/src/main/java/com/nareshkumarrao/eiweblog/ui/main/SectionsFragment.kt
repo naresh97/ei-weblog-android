@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -48,12 +49,18 @@ class SectionsFragment : Fragment() {
         }
     }
 
-    private fun updateView(get_articles: List<Article>){
-        this.swipeRefreshLayout?.isRefreshing=false
+    private fun updateView(get_articles: List<Article>?) {
+        this.swipeRefreshLayout?.isRefreshing = false
+
+        if (get_articles == null) {
+            Toast.makeText(context, getString(R.string.load_weblog_error_message), Toast.LENGTH_LONG).show()
+            return
+        }
+
         val articles: MutableList<Article> = mutableListOf()
         val title = arguments?.getString(ARG_SECTION_NAME) ?: return
-        for (article in get_articles){
-            if(article.category == title){
+        for (article in get_articles) {
+            if (article.category == title) {
                 articles.add(article)
             }
         }

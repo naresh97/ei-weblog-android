@@ -22,22 +22,22 @@ import java.io.StringReader
 
 internal object Utilities {
 
-    fun weblogList(context: Context?, function: (d: List<Article>) -> Unit){
+    fun weblogList(context: Context?, function: (d: List<Article>?) -> Unit) {
         val sharedPref = context?.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
         val weblogResponse = sharedPref?.getString(context.getString(R.string.weblog_response_key), null)
-        if (weblogResponse == null){
+        if (weblogResponse == null) {
             fetchWeblogXML(context, function)
             return
         }
 
         val parser: XmlPullParser = Xml.newPullParser()
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
-        parser.setInput(  StringReader(weblogResponse) )
+        parser.setInput(StringReader(weblogResponse))
         parser.nextTag()
         function(parseXML(parser))
     }
 
-    fun fetchWeblogXML(context: Context?, function: (d: List<Article>) -> Unit) {
+    fun fetchWeblogXML(context: Context?, callback: (d: List<Article>?) -> Unit) {
 
         val queue = Volley.newRequestQueue(context)
 
@@ -49,7 +49,7 @@ internal object Utilities {
 
                     val sharedPref = context?.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
                     if (sharedPref != null) {
-                        with (sharedPref.edit()) {
+                        with(sharedPref.edit()) {
                             putString(context.getString(R.string.weblog_response_key), responseStr)
                             apply()
                         }
@@ -58,14 +58,17 @@ internal object Utilities {
                     val parser: XmlPullParser = Xml.newPullParser()
                     parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
                     //Log.d("XMLLIST", responseStr )
-                    parser.setInput(  StringReader(responseStr) )
+                    parser.setInput(StringReader(responseStr))
                     parser.nextTag()
 
                     val articles = parseXML(parser)
-                    function(articles)
+                    callback(articles)
 
                 },
-                { error -> Log.e("XMLLIST", error.toString()) })
+                { error ->
+                    Log.e("XMLLIST", error.toString())
+                    callback(null)
+                })
 
         queue.add(stringRequest)
     }

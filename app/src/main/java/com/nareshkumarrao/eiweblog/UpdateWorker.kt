@@ -16,11 +16,13 @@ class UpdateWorker(private val context: Context, workerParams: WorkerParameters)
 
         if(weblogNotificationsEnabled!!){
             Utilities.weblogList(context) { articles ->
+                articles ?: return@weblogList
                 val lastArticle = Utilities.getLatestRelevantArticle(articles)!!
                 val hashString = lastArticle.title + lastArticle.content + lastArticle.date
                 val oldHash = md5(hashString)
 
                 Utilities.fetchWeblogXML(applicationContext){newArticles ->
+                    newArticles ?: return@fetchWeblogXML
                     val lastNewArticle = Utilities.getLatestRelevantArticle(newArticles)!!
                     val newHashString = lastNewArticle.title + lastNewArticle.content + lastNewArticle.date
                     val newHash = md5(newHashString)

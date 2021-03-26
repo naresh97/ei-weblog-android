@@ -1,17 +1,20 @@
 package com.nareshkumarrao.eiweblog
 
+import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.jsoup.Connection
 import org.jsoup.Jsoup
+import java.net.SocketTimeoutException
 
 data class ExamRow(val name: String, val grade: String, val attempt: String, val date: String)
 
@@ -34,17 +37,17 @@ internal object HISUtility {
             return
         }
 
-            val newRows: MutableList<ExamRow> = mutableListOf()
-            fetchExamRows(context) { examRows ->
-                if (examRows != null) {
-                    for (examRow in examRows) {
-                        if (!savedRows.contains(examRow)) {
-                            newRows.add(examRow)
-                        }
+        val newRows: MutableList<ExamRow> = mutableListOf()
+        fetchExamRows(context) { examRows ->
+            if (examRows != null) {
+                for (examRow in examRows) {
+                    if (!savedRows.contains(examRow)) {
+                        newRows.add(examRow)
                     }
                 }
-                callback(newRows)
             }
+            callback(newRows)
+        }
 
 
     }
@@ -77,75 +80,118 @@ internal object HISUtility {
                 ?: return null
 
         val runnable = Runnable {
-            val postData: MutableMap<String, String> = mutableMapOf()
-            postData["asdf"] = username
-            postData["fdsa"] = password
 
-            val loginPage = Jsoup.connect(context.getString(R.string.ossc_login_post))
+            try {
+                val postData: MutableMap<String, String> = mutableMapOf()
+                postData["asdf"] = username
+                postData["fdsa"] = password
+
+                val loginPage = Jsoup.connect(context.getString(R.string.ossc_login_post))
                     .method(Connection.Method.POST)
                     .userAgent("Mozilla")
                     .data(postData)
+                    .timeout(60000)
                     .execute()
 
-            val selectNotenspiegel = Jsoup.connect(context.getString(R.string.ossc_select_noten))
+                val selectNotenspiegel =
+                    Jsoup.connect(context.getString(R.string.ossc_select_noten))
+                        .userAgent("Mozilla")
+                        .cookies(loginPage.cookies())
+                        .timeout(60000)
+                        .get()
+
+                val notenspiegelURL =
+                    selectNotenspiegel.select("a[href]:containsOwn(Notenspiegel)").first()
+                        ?.attr("href")
+                        ?: kotlin.run {
+                            callback(null)
+                            return@Runnable
+                        }
+
+                val selectStudiengangUnhide = Jsoup.connect(notenspiegelURL)
                     .userAgent("Mozilla")
                     .cookies(loginPage.cookies())
+                    .timeout(60000)
+                    .get()
+                val selectStudiengangUnhideURL =
+                    selectStudiengangUnhide.select("a[href]:containsOwn(Abschluss)").first()
+                        .attr("href")
+
+                val selectStudiengang = Jsoup.connect(selectStudiengangUnhideURL)
+                    .userAgent("Mozilla")
+                    .cookies(loginPage.cookies())
+                    .timeout(60000)
+                    .get()
+                val studiengangURL =
+                    selectStudiengang.select("a[href]:containsOwn(Leistungen anzeigen)").first()
+                        .attr("href")
+
+
+                val notenSpiegelPage = Jsoup.connect(studiengangURL)
+                    .userAgent("Mozilla")
+                    .cookies(loginPage.cookies())
+                    .timeout(60000)
                     .get()
 
-            val notenspiegelURL = selectNotenspiegel.select("a[href]:containsOwn(Notenspiegel)").first()?.attr("href")
-                    ?: kotlin.run {
-                        callback(null)
-                        return@Runnable
+                val allGradesRows =
+                    notenSpiegelPage.select("div.fixedContainer > table > tbody > tr")
+                val examRows: MutableList<ExamRow> = mutableListOf()
+                for (row in allGradesRows) {
+                    if (row.select("td.tabelle1_alignleft").size < 1) {
+                        continue
                     }
-
-            val selectStudiengangUnhide = Jsoup.connect(notenspiegelURL)
-                    .userAgent("Mozilla")
-                    .cookies(loginPage.cookies())
-                    .get()
-            val selectStudiengangUnhideURL = selectStudiengangUnhide.select("a[href]:containsOwn(Abschluss)").first().attr("href")
-
-            val selectStudiengang = Jsoup.connect(selectStudiengangUnhideURL)
-                    .userAgent("Mozilla")
-                    .cookies(loginPage.cookies())
-                    .get()
-            val studiengangURL = selectStudiengang.select("a[href]:containsOwn(Leistungen anzeigen)").first().attr("href")
-
-
-            val notenSpiegelPage = Jsoup.connect(studiengangURL)
-                    .userAgent("Mozilla")
-                    .cookies(loginPage.cookies())
-                    .get()
-
-            val allGradesRows = notenSpiegelPage.select("div.fixedContainer > table > tbody > tr")
-            val examRows: MutableList<ExamRow> = mutableListOf()
-            for (row in allGradesRows) {
-                if (row.select("td.tabelle1_alignleft").size < 1) {
-                    continue
+                    val columns = row.select("td")
+                    if (columns.size < 1) {
+                        continue
+                    }
+                    val examRow = ExamRow(
+                        columns[1].text(),
+                        columns[3].text(),
+                        columns[6].text(),
+                        columns[7].text()
+                    )
+                    examRows.add(examRow)
                 }
-                val columns = row.select("td")
-                if (columns.size < 1) {
-                    continue
+                saveExamRows(context, examRows)
+                callback(examRows)
+            } catch (e: Exception) {
+                if (context is Activity) context.runOnUiThread {
+                    when (e) {
+                        is SocketTimeoutException -> {
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.ossc_timeout_message),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        else -> {
+                            Toast.makeText(context, e.localizedMessage, Toast.LENGTH_LONG).show()
+                        }
+                    }
+                    context.finish()
                 }
-                val examRow = ExamRow(columns[1].text(), columns[3].text(), columns[6].text(), columns[7].text())
-                examRows.add(examRow)
             }
-            saveExamRows(context, examRows)
-            callback(examRows)
         }
 
         return Thread(runnable).start()
     }
-    fun sendNotification(context: Context?, examRow: ExamRow, id:Int) {
+
+    fun sendNotification(context: Context?, examRow: ExamRow, id: Int) {
         val intent = Intent(context, NotificationSettingsActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
-        val builder = NotificationCompat.Builder(context!!, context.getString(R.string.grades_notification_channel_id))
-                .setSmallIcon(R.drawable.ic_stat_name)
-                .setContentTitle(context.getString(R.string.exam_results_notification))
-                .setStyle(NotificationCompat.BigTextStyle()
-                        .bigText("${examRow.name}: ${examRow.grade}"))
+        val builder = NotificationCompat.Builder(
+            context!!,
+            context.getString(R.string.grades_notification_channel_id)
+        )
+            .setSmallIcon(R.drawable.ic_stat_name)
+            .setContentTitle(context.getString(R.string.exam_results_notification))
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText("${examRow.name}: ${examRow.grade}")
+            )
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true)
@@ -155,15 +201,21 @@ internal object HISUtility {
 
     }
 
-    fun createNotificationChannel(context: Context?){
+    fun createNotificationChannel(context: Context?) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = context?.getString(R.string.grades_notification_channel_name)
-            val descriptionText = context?.getString(R.string.grades_notification_channel_description)
+            val descriptionText =
+                context?.getString(R.string.grades_notification_channel_description)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(context?.getString(R.string.grades_notification_channel_id), name, importance).apply {
+            val channel = NotificationChannel(
+                context?.getString(R.string.grades_notification_channel_id),
+                name,
+                importance
+            ).apply {
                 description = descriptionText
             }
-            val notificationManager: NotificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager: NotificationManager =
+                context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }
