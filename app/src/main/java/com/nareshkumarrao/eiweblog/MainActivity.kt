@@ -100,4 +100,13 @@ class MainActivity : AppCompatActivity() {
     fun showGrades(item: MenuItem){
         startActivity(Intent(this, GradesActivity::class.java))
     }
+
+    fun showReportIssue(item: MenuItem){
+        startActivity(
+                Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://github.com/naresh97/ei-weblog-android/issues/new")
+                )
+        )
+    }
 }

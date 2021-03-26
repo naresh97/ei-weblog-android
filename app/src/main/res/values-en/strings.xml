@@ -35,4 +35,5 @@
     <string name="error">ERROR!</string>
     <string name="ossc_timeout_message">OSSC has timed out. Try again later.</string>
     <string name="load_weblog_error_message">Could not load new weblog data. Try again later.</string>
+    <string name="report_issue">Report Issue</string>
 </resources>

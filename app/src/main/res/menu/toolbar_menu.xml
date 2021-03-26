@@ -5,13 +5,17 @@
         android:onClick="showNotificationSettings"
         android:title="@string/notifications_title"
         app:showAsAction="never" />
-    <item
-        android:onClick="showAbout"
-        android:title="@string/about"
-        app:showAsAction="never" />
 
     <item
         android:onClick="showGrades"
         android:title="@string/grades_title"
+        app:showAsAction="never" />
+    <item
+        android:onClick="showAbout"
+        android:title="@string/about"
+        app:showAsAction="never" />
+    <item
+        android:onClick="showReportIssue"
+        android:title="@string/report_issue"
         app:showAsAction="never" />
 </menu>
