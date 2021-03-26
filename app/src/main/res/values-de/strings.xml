@@ -32,4 +32,6 @@
     <string name="enable_grades_notifications_text">Benachrichtige mich bei neuem Klausurergebnis</string>
     <string name="login_dialog_title">Anmelden bei OSSC</string>
     <string name="error">FEHLER!</string>
+    <string name="ossc_timeout_message">Timeout-Fehler bei OSSC. Versuch mal später.</string>
+    <string name="load_weblog_error_message">Weblog kann nicht aktualisiert werden. Versuch mal später.</string>
 </resources>
