@@ -2,7 +2,7 @@
 <resources>
     <string name="about">Information</string>
     <string name="about_title">Info</string>
-    <string name="send_beer">Shick mir €5 für ein Bier über PayPal</string>
+    <string name="send_beer">Kauf mir ein Bier über PayPal</string>
     <string name="notifications_title">Benachrichtigung</string>
     <string name="enable_weblog_notifications_text">Benachrichtige mich über Neuerungen auf der Weblog</string>
     <string name="about_text">
