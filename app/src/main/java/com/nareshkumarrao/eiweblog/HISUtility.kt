@@ -34,12 +34,12 @@ internal object HISUtility {
     fun checkForUpdates(context: Context?, callback: (examRows: List<ExamRow>?) -> Unit) {
         val savedRows = getSavedExamRows(context) ?: run {
             callback(null)
-            return
+            return@checkForUpdates
         }
 
         val newRows: MutableList<ExamRow> = mutableListOf()
         fetchExamRows(context) { examRows ->
-            if (examRows != null) {
+            if (examRows != null && savedRows.isNotEmpty()) {
                 for (examRow in examRows) {
                     if (!savedRows.contains(examRow)) {
                         newRows.add(examRow)

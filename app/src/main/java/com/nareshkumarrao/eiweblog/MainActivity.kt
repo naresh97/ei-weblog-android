@@ -37,10 +37,15 @@ class MainActivity : AppCompatActivity() {
         Utilities.createNotificationChannel(this)
         HISUtility.createNotificationChannel(this)
 
-        val uploadWorkRequest: WorkRequest =
-            PeriodicWorkRequestBuilder<UpdateWorker>(1, TimeUnit.HOURS)
-                .build()
-        WorkManager.getInstance(this).enqueue(uploadWorkRequest)
+        val updateWeblogWorkerRequest: WorkRequest =
+                PeriodicWorkRequestBuilder<UpdateWeblogWorker>(1, TimeUnit.HOURS)
+                        .build()
+        val updateGradesWorkerRequest: WorkRequest =
+                PeriodicWorkRequestBuilder<UpdateGradesWorker>(3, TimeUnit.HOURS)
+                        .build()
+
+        WorkManager.getInstance(this).enqueue(updateWeblogWorkerRequest)
+        WorkManager.getInstance(this).enqueue(updateGradesWorkerRequest)
 
         Utilities.fetchRepoReleaseInformation(this, ::repoReleaseCallback)
     }
