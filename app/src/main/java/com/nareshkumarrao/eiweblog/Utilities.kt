@@ -167,6 +167,7 @@ internal object Utilities {
             }
             val notificationManager: NotificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
+            notificationManager.deleteNotificationChannel("com.nareshkumarrao.eiweblog.update")
         }
     }
 

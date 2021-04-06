@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
@@ -37,15 +38,15 @@ class MainActivity : AppCompatActivity() {
         Utilities.createNotificationChannel(this)
         HISUtility.createNotificationChannel(this)
 
-        val updateWeblogWorkerRequest: WorkRequest =
+        val updateWeblogWorkerRequest =
                 PeriodicWorkRequestBuilder<UpdateWeblogWorker>(1, TimeUnit.HOURS)
                         .build()
-        val updateGradesWorkerRequest: WorkRequest =
+        val updateGradesWorkerRequest =
                 PeriodicWorkRequestBuilder<UpdateGradesWorker>(3, TimeUnit.HOURS)
                         .build()
 
-        WorkManager.getInstance(this).enqueue(updateWeblogWorkerRequest)
-        WorkManager.getInstance(this).enqueue(updateGradesWorkerRequest)
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork("weblog", ExistingPeriodicWorkPolicy.REPLACE, updateWeblogWorkerRequest)
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork("grades", ExistingPeriodicWorkPolicy.REPLACE, updateGradesWorkerRequest)
 
         Utilities.fetchRepoReleaseInformation(this, ::repoReleaseCallback)
     }
